@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "promediathek"
-version = "0.0.5"
+version = "0.0.6"
 authors = [
   { name="Jan Erik Mühlwald", email="problemo@problemo.pro" },
 ]
@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-license = "MIT"
+license = "GPL-3.0-only"
 license-files = ["LICEN[CS]E*"]
 dependencies = [
     "promediapaket",
