@@ -10,6 +10,9 @@ class Sammelpaket:
     titel: str
     description: str
 
+    def __str__(self) -> str:
+        return f"Provider: {self.provider} - Type: {self.type:>8} - ID: {self.id} - Titel: {self.titel}"
+
     @property
     def valid(self) -> bool:
         str_properties = [self.type, self.provider, self.id, self.titel, self.description]
@@ -65,6 +68,9 @@ class EpisodeSammelpaket(Sammelpaket):
 
     episode_thumbnail_vertical: str | None = None
     episode_thumbnail_horizontal: str | None = None
+
+    def __str__(self) -> str:
+        return super().__str__() + f" - Season: {self.season_number} - Episode: {self.episode_number} - Series Titel: {self.series_title}"
 
     @property
     def valid(self) -> bool:
