@@ -38,7 +38,8 @@ def download_cli(provider: BaseProvider):
     global args
     args = arg_parser.parse_args()
 
-    if not provider.check_if_subscribed():
+    is_subscribed = provider.check_if_subscribed()
+    if provider.listing_requires_subscription and not is_subscribed:
         print(f"You are not subscribed to {provider.name}.")
         exit(1)
 
@@ -46,6 +47,10 @@ def download_cli(provider: BaseProvider):
         for sammelpaket in ProDB().sort_sammelpakete(provider.get_all()):
             print(sammelpaket)
         exit(0)
+
+    if not is_subscribed:
+        print(f"You are not subscribed to {provider.name}.")
+        exit(1)
 
     if not args.download_id:
         download_provider(provider)

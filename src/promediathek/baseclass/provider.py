@@ -4,6 +4,7 @@ from ..pakete.sammelpaket import Sammelpaket, MovieSammelpaket, EpisodeSammelpak
 
 class BaseProvider:
     api: BaseAPI = None   # Init the provider API e. g. api = ArdAPI()
+    listing_requires_subscription = False  # True If the pure viewing of what Content is available requieres a subscription.
 
     def __init__(self):
         self.name = self.api.name
