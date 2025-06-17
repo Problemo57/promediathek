@@ -1,0 +1,14 @@
+Serien
+Filme
+venv
+.venv
+.idea
+*.log
+logins
+*.pmp
+*.mp4
+*.mkv
+*.png
+*.jpg
+*.db
+*.js
