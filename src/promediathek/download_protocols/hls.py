@@ -178,8 +178,14 @@ class Video(BaseVideo):
         self.width = 0
         self.height = 0
         self.bitrate = 0
+        self.audio_group = None
 
         if not hls_line.value:
+            return
+
+        # Can occur when the Stream only has Audio.
+        if 'RESOLUTION' not in hls_line.value:
+            log("WARN", f"RESOLUTION not in {hls_line.value}")
             return
 
         self.width = int(hls_line.value['RESOLUTION'].split('x')[0])
