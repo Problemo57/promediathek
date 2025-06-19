@@ -139,7 +139,7 @@ def get_segment_template(adaption_set: AdaptationSet, representation: Representa
 
 
 def construct_url(base_url: str, representation: Representation, url: str = ''):
-    url_template = base_url + url
+    url_template = base_url + "/" + url
     url_template = url_template.replace('$$', '$')
     url_template = url_template.replace('$RepresentationID$', representation.id)
     return url_template
