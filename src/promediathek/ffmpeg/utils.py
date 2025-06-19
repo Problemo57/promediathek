@@ -221,6 +221,9 @@ def remove_drm(file: PathLike | str | list[PathLike | str], drm_keys: list[str])
     :param drm_keys: List of DRM keys to try.
     :return:
     """
+    if not drm_keys and not check_for_errors(file):
+        return Path(file)
+
     if isinstance(file, list):
         drm_threads = []
         with MultiThreader() as threader:
