@@ -233,9 +233,6 @@ def remove_drm(file: PathLike | str | list[PathLike | str], drm_keys: list[str])
     :param drm_keys: List of DRM keys to try.
     :return:
     """
-    if not drm_keys and not check_for_errors(file):
-        return Path(file)
-
     if isinstance(file, list):
         drm_threads = []
         with MultiThreader() as threader:
@@ -244,6 +241,9 @@ def remove_drm(file: PathLike | str | list[PathLike | str], drm_keys: list[str])
                 drm_threads.append(thread)
 
         return [thread.result() for thread in drm_threads]
+
+    if not drm_keys and not check_for_errors(file):
+        return Path(file)
 
     # If ffmpeg can't find the key, test them all with mp4decrypt.
     drm_key = test_keys(file, drm_keys) or drm_keys
