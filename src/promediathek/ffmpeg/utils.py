@@ -163,7 +163,7 @@ def check_for_errors(video_file, ignore_duration: bool = False) -> int:
 
     ffmpeg_out = run([
         'ffmpeg', '-y', '-loglevel', 'error',
-        '-sseof', '-180', '-i', video_file,
+        '-ss', str(int(video_duration - 180)), '-i', video_file,
         '-f', 'null', '/dev/null'
     ], capture_output=True)
     if ffmpeg_out.returncode:
@@ -171,8 +171,20 @@ def check_for_errors(video_file, ignore_duration: bool = False) -> int:
         return 6
 
     elif ffmpeg_out.stderr:
-        log("ERROR", f'FFmpeg Check Error failed. {video_file}')
-        return 7
+
+        ffmpeg_out = run([
+            'ffmpeg', '-y', '-loglevel', 'error',
+            '-i', video_file,
+            '-f', 'null', '/dev/null'
+        ], capture_output=True)
+
+        if ffmpeg_out.returncode:
+            log("ERROR", f'FFmpeg Check Error failed. {video_file}')
+            return 7
+
+        elif ffmpeg_out.stderr:
+            log("ERROR", f'FFmpeg Check Error failed. {video_file}')
+            return 8
 
     return 0
 
