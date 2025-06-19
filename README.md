@@ -136,7 +136,7 @@ class TemplateProvider(BaseProvider):
         # TODO
         raise NotImplementedError
 
-    def search(self, search_term: str):
+    def search(self, search_term: str) -> list[Sammelpaket]:
         # TODO: Optional for Speed
         return super().search(search_term)
 

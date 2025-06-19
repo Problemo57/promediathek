@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "promediathek"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
   { name="Jan Erik Mühlwald", email="problemo@problemo.pro" },
 ]
@@ -21,14 +21,8 @@ dependencies = [
     "promediapaket",
     "pywidevine",
     "pyplayready",
-    "requests",
     "mpegdash",
-    "argcomplete",
-    "langcodes",
-    "language_data",
     "pycryptodome",
-    "pillow",
-    "pillow-avif-plugin"
 ]
 
 [project.urls]
