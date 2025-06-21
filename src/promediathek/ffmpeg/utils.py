@@ -143,7 +143,7 @@ def check_for_errors(video_file, ignore_duration: bool = False) -> int:
         return 2
 
     if not ignore_duration:
-        for stream in [stream for stream in stream_durations if video_duration - stream > 1]:
+        for stream in [stream for stream in stream_durations if stream and video_duration - stream > 1]:
             log("ERROR", f'Duration missmatch {video_duration=} > {stream=}')
             return 3
 
