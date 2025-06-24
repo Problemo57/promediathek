@@ -119,7 +119,7 @@ def get_duration(ffprobe_data: dict) -> float:
     return duration
 
 
-def check_for_errors(video_file, ignore_duration: bool = False) -> int:
+def check_for_errors(video_file) -> int:
     ffprobe_out = ffprobe(video_file)
     if ffprobe_out['format']['format_name'] == 'webvtt':
         print("VERBOSE", "Subtitles can't be checked for errors.")
@@ -131,9 +131,6 @@ def check_for_errors(video_file, ignore_duration: bool = False) -> int:
         '-f', 'null', '/dev/null'
     ], capture_output=True)
 
-    video_duration = get_duration(ffprobe_out)
-    stream_durations = [get_duration(stream) for stream in ffprobe_out['streams']]
-
     if ffmpeg_out.returncode:
         log("ERROR", f'FFmpeg Check Error failed. {video_file}')
         return 1
@@ -141,11 +138,6 @@ def check_for_errors(video_file, ignore_duration: bool = False) -> int:
     elif ffmpeg_out.stderr:
         log("ERROR", f'FFmpeg Check Error failed. {video_file}')
         return 2
-
-    if not ignore_duration:
-        for stream in [stream for stream in stream_durations if stream and video_duration - stream > 1]:
-            log("ERROR", f'Duration missmatch {video_duration=} > {stream=}')
-            return 3
 
     ffmpeg_out = run([
         'ffmpeg', '-y', '-loglevel', 'error',
@@ -161,6 +153,7 @@ def check_for_errors(video_file, ignore_duration: bool = False) -> int:
         log("ERROR", f'FFmpeg Check Error failed. {video_file}')
         return 5
 
+    video_duration = get_duration(ffprobe_out)
     ffmpeg_out = run([
         'ffmpeg', '-y', '-loglevel', 'error',
         '-ss', str(int(video_duration - 180)), '-i', video_file,
