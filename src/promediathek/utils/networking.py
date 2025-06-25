@@ -187,21 +187,28 @@ def safe_get_large(url: str, outfile: Path, progresspaket: Progresspaket = None,
         progress_index = len(progresspaket.progress_list)
         progresspaket.progress_list.append(0)
 
+    total_size = 0
+    written_bytes = 0
     with safe_request(methode="GET", url=url, stream=True, **kwargs) as stream:
         if stream.status != 200:
             raise RuntimeError(f"Request failed with status {stream.status}")
 
-        total_size = 16238
         if 'content-length' in stream.headers:
-            total_size = int(stream.headers['content-length']) + 1
+            total_size = int(stream.headers['content-length'])
+
         chunk_num = 0
-        chunk_size = max(total_size//2000, 16238)
+        chunk_size = max(total_size // 2000, 16238)
         with outfile.open('wb') as file:
             while chunk := stream.read(chunk_size):
-                file.write(chunk)
+                written_bytes += file.write(chunk)
                 chunk_num += 1
 
                 if progresspaket:
                     progresspaket.progress_list[progress_index] = chunk_num / (total_size / chunk_size)
+
+    if total_size > written_bytes:
+        log("WARN", f"Download of {url} failed. Only {written_bytes} of {total_size} bytes written.")
+        outfile.unlink()
+        return safe_get_large(url, outfile, progresspaket, **kwargs)
 
     return outfile
